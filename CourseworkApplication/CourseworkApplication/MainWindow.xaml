@@ -5,26 +5,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CourseworkApplication"
         mc:Ignorable="d"
-        Title="Messager" Height="350" Width="649.418">
+        Title="Messager" Height="365.099" Width="649.418">
     <Grid>
         <TextBox x:Name="tbx_header" HorizontalAlignment="Left" Height="23" Margin="10,41,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="361"/>
         <RichTextBox x:Name="tbx_content" HorizontalAlignment="Left" Height="220" Margin="10,69,0,0" VerticalAlignment="Top" Width="361">
-            <FlowDocument>
-                <Paragraph>
-                    <Run Text="RichTextBox"/>
-                </Paragraph>
-            </FlowDocument>
+            <FlowDocument/>
         </RichTextBox>
         <Label x:Name="label" Content="Input" HorizontalAlignment="Left" Margin="172,10,0,0" VerticalAlignment="Top"/>
         <Label x:Name="label1" Content="Processed message" HorizontalAlignment="Left" Margin="449,10,0,0" VerticalAlignment="Top"/>
         <RichTextBox x:Name="tbx_output" HorizontalAlignment="Left" Height="273" Margin="376,41,0,0" VerticalAlignment="Top" Width="257">
-            <FlowDocument>
-                <Paragraph>
-                    <Run Text="RichTextBox"/>
-                </Paragraph>
-            </FlowDocument>
+            <FlowDocument/>
         </RichTextBox>
-        <Button x:Name="btn_submit" Content="Submit" HorizontalAlignment="Left" Margin="10,294,0,0" VerticalAlignment="Top" Width="361"/>
+        <Button x:Name="btn_submit" Content="Submit" HorizontalAlignment="Left" Margin="125,294,0,0" VerticalAlignment="Top" Width="246"/>
+        <Button x:Name="btn_clear" Content="Clear" Margin="10,294,0,0" Click="btn_clear_Click" VerticalAlignment="Top" HorizontalAlignment="Left" Width="110"/>
 
     </Grid>
 </Window>

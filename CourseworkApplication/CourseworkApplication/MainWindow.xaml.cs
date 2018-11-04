@@ -24,5 +24,11 @@ namespace CourseworkApplication
         {
             InitializeComponent();
         }
+
+        private void btn_clear_Click(object sender, RoutedEventArgs e)
+        {
+            tbx_header.Text = "";
+            tbx_content.Document.Blocks.Clear();
+        }
     }
 }
