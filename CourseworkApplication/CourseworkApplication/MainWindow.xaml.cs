@@ -20,6 +20,10 @@ namespace CourseworkApplication
     /// </summary>
     public partial class MainWindow : Window
     {
+        string header;
+        string body;
+        string messageType;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -29,6 +33,37 @@ namespace CourseworkApplication
         {
             tbx_header.Text = "";
             tbx_content.Document.Blocks.Clear();
+        }
+
+        private void btn_submit_Click(object sender, RoutedEventArgs e)
+        {
+            header = tbx_header.Text;
+            body = new TextRange(tbx_content.Document.ContentStart, tbx_content.Document.ContentEnd).Text;
+            Message myMessage = new Sms("S123456789", "No Message");
+
+            switch (header.Substring(0, 1))
+            {
+                case "S":
+                    myMessage = new Sms(header, body);
+                    messageType = "Sms";
+                    break;
+                case "T":
+                    myMessage = new Tweet(header, body);
+                    messageType = "Tweet";
+                    break;
+                case "E":
+                    myMessage = new Email(header, body);
+                    messageType = "Email";
+                    break;
+                default:
+                    messageType = "Unknown";
+                    break;
+            }
+
+            tbx_output.Document.Blocks.Clear();
+            tbx_output.Document.Blocks.Add(new Paragraph(new Run(myMessage.messageHeaderAccess)));
+            tbx_output.Document.Blocks.Add(new Paragraph(new Run(myMessage.messageBodyAccess)));
+            tbx_output.Document.Blocks.Add(new Paragraph(new Run(myMessage.GetType().ToString())));
         }
     }
 }

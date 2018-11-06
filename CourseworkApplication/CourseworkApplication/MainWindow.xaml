@@ -16,7 +16,7 @@
         <RichTextBox x:Name="tbx_output" HorizontalAlignment="Left" Height="273" Margin="376,41,0,0" VerticalAlignment="Top" Width="257">
             <FlowDocument/>
         </RichTextBox>
-        <Button x:Name="btn_submit" Content="Submit" HorizontalAlignment="Left" Margin="125,294,0,0" VerticalAlignment="Top" Width="246"/>
+        <Button x:Name="btn_submit" Content="Submit" HorizontalAlignment="Left" Margin="125,294,0,0" VerticalAlignment="Top" Width="246" Click="btn_submit_Click"/>
         <Button x:Name="btn_clear" Content="Clear" Margin="10,294,0,0" Click="btn_clear_Click" VerticalAlignment="Top" HorizontalAlignment="Left" Width="110"/>
 
     </Grid>
