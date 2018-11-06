@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace CourseworkApplication
 {
-    class Sms:Message
+    class Sms : Message
     {
         public Sms(string messageHeader, string messageBody)
         {
             this.messageHeader = messageHeader;
-            this.messageBody = messageBody;
+            keywordList.Add(new Keyword("Hello", "Hello World"));
+            this.messageBody = keywordReplace(messageBody);
         }
 
         public override string messageHeaderAccess {

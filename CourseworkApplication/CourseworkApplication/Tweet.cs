@@ -11,7 +11,8 @@ namespace CourseworkApplication
         public Tweet(string messageHeader, string messageBody)
         {
             this.messageHeader = messageHeader;
-            this.messageBody = messageBody;
+            keywordList.Add(new Keyword("Hello", "Hello World"));
+            this.messageBody = keywordReplace(messageBody);
         }
 
         public override string messageHeaderAccess
