@@ -10,7 +10,7 @@ namespace CourseworkApplication
     class Email: Message
     {
         string subject;
-        public Email(string messageHeader, string messageBody)
+        public Email(string messageHeader, string messageBody, DataManager dataManager)
         {
             this.messageHeader = messageHeader;
             this.sender = extractSender(messageBody);
@@ -24,6 +24,7 @@ namespace CourseworkApplication
             if (validateInputs(messageBody))
             {
                 this.messageBody = removeURLS(messageBody);
+                dataManager.saveToFile(this);
             }
             else
             {

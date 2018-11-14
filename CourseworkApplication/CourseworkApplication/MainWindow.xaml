@@ -7,7 +7,6 @@
         mc:Ignorable="d"
         Title="Messager" Height="365.099" Width="649.418">
     <Grid>
-        <TextBox x:Name="tbx_header" HorizontalAlignment="Left" Height="23" Margin="10,41,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="361"/>
         <RichTextBox x:Name="tbx_content" HorizontalAlignment="Left" Height="220" Margin="10,69,0,0" VerticalAlignment="Top" Width="361">
             <FlowDocument/>
         </RichTextBox>
@@ -18,6 +17,11 @@
         </RichTextBox>
         <Button x:Name="btn_submit" Content="Submit" HorizontalAlignment="Left" Margin="125,294,0,0" VerticalAlignment="Top" Width="246" Click="btn_submit_Click"/>
         <Button x:Name="btn_clear" Content="Clear" Margin="10,294,0,0" Click="btn_clear_Click" VerticalAlignment="Top" HorizontalAlignment="Left" Width="110"/>
+        <ComboBox x:Name="drop_messageType" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top" Width="361" Height="23">
+            <ComboBoxItem Content="SMS"/>
+            <ComboBoxItem Content="Tweet"/>
+            <ComboBoxItem Content="Email"/>
+        </ComboBox>
 
     </Grid>
 </Window>

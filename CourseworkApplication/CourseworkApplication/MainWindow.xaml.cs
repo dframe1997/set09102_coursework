@@ -23,50 +23,50 @@ namespace CourseworkApplication
         string header;
         string body;
         string messageType;
+        DataManager dataManager = new DataManager();
 
         public MainWindow()
         {
             InitializeComponent();
+            dataManager.readFromCSV();
         }
 
         private void btn_clear_Click(object sender, RoutedEventArgs e)
         {
-            tbx_header.Text = "";
             tbx_content.Document.Blocks.Clear();
         }
 
         private void btn_submit_Click(object sender, RoutedEventArgs e)
         {
-            header = tbx_header.Text;
+            header = drop_messageType.Text;
             body = new TextRange(tbx_content.Document.ContentStart, tbx_content.Document.ContentEnd).Text;
-            Message myMessage;
 
             try {
-                switch (header.Substring(0, 1))
+                switch (header)
                 {
-                    case "S":
-                        myMessage = new Sms(header, body);
+                    case "SMS":
+                        Sms mySms = new Sms(header, body, dataManager);
                         messageType = "Sms";
                         tbx_output.Document.Blocks.Clear();
-                        tbx_output.Document.Blocks.Add(new Paragraph(new Run(myMessage.messageHeaderAccess)));
-                        tbx_output.Document.Blocks.Add(new Paragraph(new Run(myMessage.messageBodyAccess)));
-                        tbx_output.Document.Blocks.Add(new Paragraph(new Run(myMessage.GetType().ToString())));
+                        tbx_output.Document.Blocks.Add(new Paragraph(new Run(mySms.messageHeaderAccess)));
+                        tbx_output.Document.Blocks.Add(new Paragraph(new Run(mySms.messageBodyAccess)));
+                        tbx_output.Document.Blocks.Add(new Paragraph(new Run(mySms.GetType().ToString())));
                         break;
-                    case "T":
-                        myMessage = new Tweet(header, body);
+                    case "Tweet":
+                        Tweet myTweet = new Tweet(header, body, dataManager);
                         messageType = "Tweet";
                         tbx_output.Document.Blocks.Clear();
-                        tbx_output.Document.Blocks.Add(new Paragraph(new Run(myMessage.messageHeaderAccess)));
-                        tbx_output.Document.Blocks.Add(new Paragraph(new Run(myMessage.messageBodyAccess)));
-                        tbx_output.Document.Blocks.Add(new Paragraph(new Run(myMessage.GetType().ToString())));
+                        tbx_output.Document.Blocks.Add(new Paragraph(new Run(myTweet.messageHeaderAccess)));
+                        tbx_output.Document.Blocks.Add(new Paragraph(new Run(myTweet.messageBodyAccess)));
+                        tbx_output.Document.Blocks.Add(new Paragraph(new Run(myTweet.GetType().ToString())));
                         break;
-                    case "E":
-                        myMessage = new Email(header, body);
+                    case "Email":
+                        Email myEmail = new Email(header, body, dataManager);
                         messageType = "Email";
                         tbx_output.Document.Blocks.Clear();
-                        tbx_output.Document.Blocks.Add(new Paragraph(new Run(myMessage.messageHeaderAccess)));
-                        tbx_output.Document.Blocks.Add(new Paragraph(new Run(myMessage.messageBodyAccess)));
-                        tbx_output.Document.Blocks.Add(new Paragraph(new Run(myMessage.GetType().ToString())));
+                        tbx_output.Document.Blocks.Add(new Paragraph(new Run(myEmail.messageHeaderAccess)));
+                        tbx_output.Document.Blocks.Add(new Paragraph(new Run(myEmail.messageBodyAccess)));
+                        tbx_output.Document.Blocks.Add(new Paragraph(new Run(myEmail.GetType().ToString())));
                         break;
                     default:
                         messageType = "Unknown";

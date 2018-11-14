@@ -8,17 +8,18 @@ namespace CourseworkApplication
 {
     class Tweet: Message
     {
-        public Tweet(string messageHeader, string messageBody)
+        public Tweet(string messageHeader, string messageBody, DataManager dataManager)
         {
             this.messageHeader = messageHeader;
             this.sender = extractSender(messageBody);
+            this.keywordList = dataManager.keywordList;
 
             messageBody = messageBody.Substring(messageBody.IndexOf(" ")).Substring(1); //Removes the sender. Second substring removes space at beginning, cannot do -1 on the first substring for some reason
 
             if (validateInputs(messageBody))
             {
-                keywordList.Add(new Keyword("Hello", "Hello World"));
                 this.messageBody = keywordReplace(messageBody);
+                dataManager.saveToFile(this);
             }
             else
             {
