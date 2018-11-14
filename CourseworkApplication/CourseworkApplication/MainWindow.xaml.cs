@@ -41,37 +41,45 @@ namespace CourseworkApplication
             body = new TextRange(tbx_content.Document.ContentStart, tbx_content.Document.ContentEnd).Text;
             Message myMessage;
 
-            switch (header.Substring(0, 1))
-            {
-                case "S":
-                    myMessage = new Sms(header, body);
-                    messageType = "Sms";
-                    tbx_output.Document.Blocks.Clear();
-                    tbx_output.Document.Blocks.Add(new Paragraph(new Run(myMessage.messageHeaderAccess)));
-                    tbx_output.Document.Blocks.Add(new Paragraph(new Run(myMessage.messageBodyAccess)));
-                    tbx_output.Document.Blocks.Add(new Paragraph(new Run(myMessage.GetType().ToString())));
-                    break;
-                case "T":
-                    myMessage = new Tweet(header, body);
-                    messageType = "Tweet";
-                    tbx_output.Document.Blocks.Clear();
-                    tbx_output.Document.Blocks.Add(new Paragraph(new Run(myMessage.messageHeaderAccess)));
-                    tbx_output.Document.Blocks.Add(new Paragraph(new Run(myMessage.messageBodyAccess)));
-                    tbx_output.Document.Blocks.Add(new Paragraph(new Run(myMessage.GetType().ToString())));
-                    break;
-                case "E":
-                    myMessage = new Email(header, body);
-                    messageType = "Email";
-                    tbx_output.Document.Blocks.Clear();
-                    tbx_output.Document.Blocks.Add(new Paragraph(new Run(myMessage.messageHeaderAccess)));
-                    tbx_output.Document.Blocks.Add(new Paragraph(new Run(myMessage.messageBodyAccess)));
-                    tbx_output.Document.Blocks.Add(new Paragraph(new Run(myMessage.GetType().ToString())));
-                    break;
-                default:
-                    messageType = "Unknown";
-                    break;
+            try {
+                switch (header.Substring(0, 1))
+                {
+                    case "S":
+                        myMessage = new Sms(header, body);
+                        messageType = "Sms";
+                        tbx_output.Document.Blocks.Clear();
+                        tbx_output.Document.Blocks.Add(new Paragraph(new Run(myMessage.messageHeaderAccess)));
+                        tbx_output.Document.Blocks.Add(new Paragraph(new Run(myMessage.messageBodyAccess)));
+                        tbx_output.Document.Blocks.Add(new Paragraph(new Run(myMessage.GetType().ToString())));
+                        break;
+                    case "T":
+                        myMessage = new Tweet(header, body);
+                        messageType = "Tweet";
+                        tbx_output.Document.Blocks.Clear();
+                        tbx_output.Document.Blocks.Add(new Paragraph(new Run(myMessage.messageHeaderAccess)));
+                        tbx_output.Document.Blocks.Add(new Paragraph(new Run(myMessage.messageBodyAccess)));
+                        tbx_output.Document.Blocks.Add(new Paragraph(new Run(myMessage.GetType().ToString())));
+                        break;
+                    case "E":
+                        myMessage = new Email(header, body);
+                        messageType = "Email";
+                        tbx_output.Document.Blocks.Clear();
+                        tbx_output.Document.Blocks.Add(new Paragraph(new Run(myMessage.messageHeaderAccess)));
+                        tbx_output.Document.Blocks.Add(new Paragraph(new Run(myMessage.messageBodyAccess)));
+                        tbx_output.Document.Blocks.Add(new Paragraph(new Run(myMessage.GetType().ToString())));
+                        break;
+                    default:
+                        messageType = "Unknown";
+                        tbx_output.Document.Blocks.Clear();
+                        tbx_output.Document.Blocks.Add(new Paragraph(new Run("In the header box, please specify the type of message you wish to send: E for email, S for sms or T for tweet followed by a 9 digit message ID.")));
+                        break;
+                }
             }
-
+            catch(Exception ex)
+            {
+                tbx_output.Document.Blocks.Clear();
+                tbx_output.Document.Blocks.Add(new Paragraph(new Run(ex.Message)));
+            }
             
         }
     }
