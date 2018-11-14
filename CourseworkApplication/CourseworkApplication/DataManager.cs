@@ -11,6 +11,8 @@ namespace CourseworkApplication
     class DataManager
     {
         public List<Keyword> keywordList;
+        public List<string> quarantineList;
+
         public void readFromCSV()
         {
             using (var reader = new StreamReader(@"..\textwords.csv"))

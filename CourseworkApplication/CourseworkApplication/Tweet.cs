@@ -8,22 +8,23 @@ namespace CourseworkApplication
 {
     class Tweet: Message
     {
-        public Tweet(string messageHeader, string messageBody, DataManager dataManager)
+        public Tweet(string messageHeaderAccess, string messageBodyAccess, DataManager dataManager)
         {
-            this.messageHeader = messageHeader;
-            this.sender = extractSender(messageBody);
-            this.keywordList = dataManager.keywordList;
+            this.messageHeader = messageHeaderAccess;
+            this.sender = extractSender(messageBodyAccess);
+            this.dataManager = dataManager;
+            this.keywordList = this.dataManager.keywordList;
 
-            messageBody = messageBody.Substring(messageBody.IndexOf(" ")).Substring(1); //Removes the sender. Second substring removes space at beginning, cannot do -1 on the first substring for some reason
+            messageBodyAccess = messageBodyAccess.Substring(messageBodyAccess.IndexOf(" ")).Substring(1); //Removes the sender. Second substring removes space at beginning, cannot do -1 on the first substring for some reason
 
-            if (validateInputs(messageBody))
+            if (validateInputs(messageBodyAccess))
             {
-                this.messageBody = keywordReplace(messageBody);
-                dataManager.saveToFile(this);
+                this.messageBody = keywordReplace(messageBodyAccess);
+                this.dataManager.saveToFile(this);
             }
             else
             {
-                throw new Exception("Message too long. Please stay below 140 characters (currently " + (messageBody.Length - 2) + ")"); //-2 for line ending characters
+                throw new Exception("Message too long. Please stay below 140 characters (currently " + (messageBodyAccess.Length - 2) + ")"); //-2 for line ending characters
             }
         }
 

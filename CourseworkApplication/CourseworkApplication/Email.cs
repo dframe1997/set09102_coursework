@@ -10,25 +10,26 @@ namespace CourseworkApplication
     class Email: Message
     {
         string subject;
-        public Email(string messageHeader, string messageBody, DataManager dataManager)
+        public Email(string messageHeaderAccess, string messageBodyAccess, DataManager dataManager)
         {
-            this.messageHeader = messageHeader;
-            this.sender = extractSender(messageBody);
+            this.messageHeader = messageHeaderAccess;
+            this.sender = extractSender(messageBodyAccess);
+            this.dataManager = dataManager;
 
-            messageBody = messageBody.Substring(messageBody.IndexOf(" ")).Substring(1);
+            messageBodyAccess = messageBodyAccess.Substring(messageBodyAccess.IndexOf(" ")).Substring(1);
 
-            this.subject = extractSubject(messageBody);
+            this.subject = extractSubject(messageBodyAccess);
 
-            messageBody = messageBody.Substring(21);
+            messageBodyAccess = messageBodyAccess.Substring(21);
 
-            if (validateInputs(messageBody))
+            if (validateInputs(messageBodyAccess))
             {
-                this.messageBody = removeURLS(messageBody);
-                dataManager.saveToFile(this);
+                this.messageBody = removeURLS(messageBodyAccess);
+                this.dataManager.saveToFile(this);
             }
             else
             {
-                throw new Exception("Message too long. Please stay below 1028 characters (currently " + (messageBody.Length - 2) + ")"); //-2 for line ending characters
+                throw new Exception("Message too long. Please stay below 1028 characters (currently " + (messageBodyAccess.Length - 2) + ")"); //-2 for line ending characters
             }
         }
 
@@ -36,6 +37,10 @@ namespace CourseworkApplication
         {
             //https://stackoverflow.com/questions/2013124/regex-matching-up-to-the-first-occurrence-of-a-character
             string pattern = @"http[^ ]*";
+            foreach(Match match in Regex.Matches(messageBody, pattern))
+            {
+                dataManager.quarantineList.Add(match.Value);
+            }
             messageBody = Regex.Replace(messageBody, pattern, "<URL Quarantined>", RegexOptions.IgnoreCase);
             return messageBody;
         }

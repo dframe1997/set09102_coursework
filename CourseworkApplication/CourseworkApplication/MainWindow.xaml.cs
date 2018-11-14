@@ -82,5 +82,17 @@ namespace CourseworkApplication
             }
             
         }
+
+        private void drop_messageType_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if(drop_messageType.SelectedValue.ToString().Substring(drop_messageType.SelectedValue.ToString().IndexOf(" ")).Substring(1) == "Email")
+            {
+                tbx_subject.IsEnabled = true;
+            }
+            else
+            {
+                tbx_subject.IsEnabled = false;
+            }
+        }
     }
 }

@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="Messager" Height="365.099" Width="649.418">
     <Grid>
-        <RichTextBox x:Name="tbx_content" HorizontalAlignment="Left" Height="220" Margin="10,69,0,0" VerticalAlignment="Top" Width="361">
+        <RichTextBox x:Name="tbx_content" HorizontalAlignment="Left" Height="133" Margin="10,156,0,0" VerticalAlignment="Top" Width="361">
             <FlowDocument/>
         </RichTextBox>
         <Label x:Name="label" Content="Input" HorizontalAlignment="Left" Margin="172,10,0,0" VerticalAlignment="Top"/>
@@ -17,11 +17,17 @@
         </RichTextBox>
         <Button x:Name="btn_submit" Content="Submit" HorizontalAlignment="Left" Margin="125,294,0,0" VerticalAlignment="Top" Width="246" Click="btn_submit_Click"/>
         <Button x:Name="btn_clear" Content="Clear" Margin="10,294,0,0" Click="btn_clear_Click" VerticalAlignment="Top" HorizontalAlignment="Left" Width="110"/>
-        <ComboBox x:Name="drop_messageType" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top" Width="361" Height="23">
+        <ComboBox x:Name="drop_messageType" HorizontalAlignment="Left" Margin="61,41,0,0" VerticalAlignment="Top" Width="310" Height="23" SelectionChanged="drop_messageType_SelectionChanged">
             <ComboBoxItem Content="SMS"/>
             <ComboBoxItem Content="Tweet"/>
             <ComboBoxItem Content="Email"/>
         </ComboBox>
+        <TextBox HorizontalAlignment="Left" Height="23" Margin="61,69,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="310"/>
+        <TextBox x:Name="tbx_subject" HorizontalAlignment="Left" Height="23" Margin="61,97,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="310" IsEnabled="False"/>
+        <Label Content="Sender" HorizontalAlignment="Left" Margin="10,65,0,0" VerticalAlignment="Top"/>
+        <Label Content="Subject" HorizontalAlignment="Left" Margin="10,93,0,0" VerticalAlignment="Top"/>
+        <Label Content="Type" HorizontalAlignment="Left" Margin="10,38,0,0" VerticalAlignment="Top"/>
+        <Label Content="Enter your message below" HorizontalAlignment="Left" Margin="116,125,0,0" VerticalAlignment="Top"/>
 
     </Grid>
 </Window>

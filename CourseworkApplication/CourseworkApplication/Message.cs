@@ -14,6 +14,7 @@ namespace CourseworkApplication
         protected string sender;
         protected string senderError = "SENDER ERROR";
         protected List<Keyword> keywordList = new List<Keyword>();
+        protected DataManager dataManager;
 
         public abstract string messageHeaderAccess { get; set; }
         public abstract string messageBodyAccess { get; set; }
