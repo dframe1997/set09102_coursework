@@ -21,6 +21,7 @@ namespace CourseworkApplication
     public partial class MainWindow : Window
     {
         string header;
+        string sender;
         string body;
         string messageType;
         DataManager dataManager = new DataManager();
@@ -37,15 +38,17 @@ namespace CourseworkApplication
         }
 
         private void btn_submit_Click(object sender, RoutedEventArgs e)
-        {
-            header = drop_messageType.Text;
+        {        
             body = new TextRange(tbx_content.Document.ContentStart, tbx_content.Document.ContentEnd).Text;
+            header = drop_messageType.Text;
+            sender = tbx_sender.Text;
 
             try {
                 switch (header)
                 {
                     case "SMS":
-                        Sms mySms = new Sms(header, body, dataManager);
+                        header = generateID("S");
+                        Sms mySms = new Sms(header, sender, body, dataManager);
                         messageType = "Sms";
                         tbx_output.Document.Blocks.Clear();
                         tbx_output.Document.Blocks.Add(new Paragraph(new Run(mySms.messageHeaderAccess)));
@@ -53,7 +56,8 @@ namespace CourseworkApplication
                         tbx_output.Document.Blocks.Add(new Paragraph(new Run(mySms.GetType().ToString())));
                         break;
                     case "Tweet":
-                        Tweet myTweet = new Tweet(header, body, dataManager);
+                        header = "T" + drop_messageType.Text;
+                        Tweet myTweet = new Tweet(header, sender, body, dataManager);
                         messageType = "Tweet";
                         tbx_output.Document.Blocks.Clear();
                         tbx_output.Document.Blocks.Add(new Paragraph(new Run(myTweet.messageHeaderAccess)));
@@ -61,7 +65,8 @@ namespace CourseworkApplication
                         tbx_output.Document.Blocks.Add(new Paragraph(new Run(myTweet.GetType().ToString())));
                         break;
                     case "Email":
-                        Email myEmail = new Email(header, body, dataManager);
+                        header = "E" + drop_messageType.Text;
+                        Email myEmail = new Email(header, sender, subject, body, dataManager);
                         messageType = "Email";
                         tbx_output.Document.Blocks.Clear();
                         tbx_output.Document.Blocks.Add(new Paragraph(new Run(myEmail.messageHeaderAccess)));
@@ -93,6 +98,18 @@ namespace CourseworkApplication
             {
                 tbx_subject.IsEnabled = false;
             }
+        }
+
+        private string generateID(string startChar)
+        {
+            string messageID = startChar;
+            Random random = new Random();
+            //https://stackoverflow.com/questions/7055489/how-to-generate-a-random-10-digit-number-in-c
+            for (int i = 0; i < 9; i++)
+            {
+                messageID += random.Next(0, 9).ToString();
+            }
+            return messageID;
         }
     }
 }

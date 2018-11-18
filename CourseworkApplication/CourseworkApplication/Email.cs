@@ -10,15 +10,20 @@ namespace CourseworkApplication
     class Email: Message
     {
         string subject;
-        public Email(string messageHeaderAccess, string messageBodyAccess, DataManager dataManager)
+        public Email(string messageHeaderAccess, string senderAccess, string subject, string messageBodyAccess, DataManager dataManager)
         {
             this.messageHeader = messageHeaderAccess;
-            this.sender = extractSender(messageBodyAccess);
             this.dataManager = dataManager;
 
-            messageBodyAccess = messageBodyAccess.Substring(messageBodyAccess.IndexOf(" ")).Substring(1);
-
-            this.subject = extractSubject(messageBodyAccess);
+            if(sender != "" && subject != "")
+            {
+                this.sender = senderAccess;
+                this.subject = subject;
+            }
+            else
+            {
+                throw new Exception("Please include an email address in the sender box and a subject with up to 20 characters in the subject box.");
+            }
 
             messageBodyAccess = messageBodyAccess.Substring(21);
 
@@ -78,33 +83,6 @@ namespace CourseworkApplication
             set
             {
                 sender = value;
-            }
-        }
-
-        public override string extractSender(string messageBody)
-        {
-            try
-            {
-                sender = messageBody.Substring(0, messageBody.IndexOf(" "));
-                return sender;
-            }
-            catch
-            {
-                throw new Exception("Please include an email address, a space, a subject with exactly 20 characters, another space, then your message of up to 1028 characters.");
-            }
-        }
-
-        public string extractSubject(string messageBody)
-        {
-            try
-            {
-                subject = messageBody.Substring(0, 20);
-                string remainingMessage = messageBody.Substring(21);
-                return subject;
-            }
-            catch
-            {
-                throw new Exception("Please include a subject with exactly 20 characters, a space and then your message of up to 1080 characters.");
             }
         }
 

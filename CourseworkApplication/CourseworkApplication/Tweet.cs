@@ -8,15 +8,20 @@ namespace CourseworkApplication
 {
     class Tweet: Message
     {
-        public Tweet(string messageHeaderAccess, string messageBodyAccess, DataManager dataManager)
+        public Tweet(string messageHeaderAccess, string senderAccess, string messageBodyAccess, DataManager dataManager)
         {
-            this.messageHeader = messageHeaderAccess;
-            this.sender = extractSender(messageBodyAccess);
             this.dataManager = dataManager;
             this.keywordList = this.dataManager.keywordList;
 
-            messageBodyAccess = messageBodyAccess.Substring(messageBodyAccess.IndexOf(" ")).Substring(1); //Removes the sender. Second substring removes space at beginning, cannot do -1 on the first substring for some reason
-
+            if (senderAccess != "")
+            {
+                this.messageHeader = messageHeaderAccess;
+                this.sender = senderAccess;
+            }
+            else
+            {
+                throw new Exception("In the sender box, please include a twitter ID of up to 15 characters (not including @).");
+            }
             if (validateInputs(messageBodyAccess))
             {
                 this.messageBody = keywordReplace(messageBodyAccess);
@@ -61,26 +66,6 @@ namespace CourseworkApplication
             set
             {
                 sender = value;
-            }
-        }
-
-        public override string extractSender(string messageBody)
-        {
-            try
-            {
-                sender = messageBody.Substring(0, messageBody.IndexOf(" "));
-                if (sender.Substring(0, 1) == "@" && sender.Length <= 16) //15 plus the @
-                {
-                    return sender;
-                }
-                else
-                {
-                    throw new Exception("Please include a twitter ID of up to 15 characters (not including @), followed by a space, then your message of up to 140 characters.");
-                }
-            }
-            catch
-            {
-                throw new Exception("Please include a twitter ID of up to 15 characters (not including @), followed by a space, then your message of up to 140 characters.");
             }
         }
 

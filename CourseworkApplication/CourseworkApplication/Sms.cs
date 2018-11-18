@@ -8,14 +8,21 @@ namespace CourseworkApplication
 {
     class Sms : Message
     {
-        public Sms(string messageHeaderAccess, string messageBodyAccess, DataManager dataManager)
+        public Sms(string messageHeaderAccess, string senderAccess, string messageBodyAccess, DataManager dataManager)
         {
             this.messageHeader = messageHeaderAccess;
-            this.sender = extractSender(messageBodyAccess);
             this.dataManager = dataManager;
             this.keywordList = this.dataManager.keywordList;
 
-            messageBodyAccess = messageBodyAccess.Substring(messageBodyAccess.IndexOf(" ")).Substring(1); //Removes the sender. Second substring removes space at beginning, cannot do -1 on the first substring for some reason
+            if (senderAccess != "")
+            {
+                
+                this.sender = extractSender(messageBodyAccess);
+            }
+            else
+            {
+                throw new Exception("Please include a phone number in the sender box.");
+            }
 
             if (validateInputs(messageBodyAccess))
             {
@@ -60,18 +67,6 @@ namespace CourseworkApplication
             set
             {
                 sender = value;
-            }
-        }
-
-        public override string extractSender(string messageBody)
-        {
-            try
-            {
-                return messageBody.Substring(0, messageBody.IndexOf(" "));
-            }
-            catch
-            {
-                throw new Exception("Please include a phone number, followed by a space and then a message of up to 140 characters.");
             }
         }
 

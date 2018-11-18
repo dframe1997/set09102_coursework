@@ -21,7 +21,6 @@ namespace CourseworkApplication
         public abstract string senderAccess { get; set; }
 
         public abstract bool validateInputs(string messageBody);
-        public abstract string extractSender(string messageBody);
 
         public abstract string encodeMessage();
 
