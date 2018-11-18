@@ -22,6 +22,7 @@ namespace CourseworkApplication
     {
         string header;
         string sender;
+        string subject;
         string body;
         string messageType;
         DataManager dataManager = new DataManager();
@@ -42,6 +43,7 @@ namespace CourseworkApplication
             body = new TextRange(tbx_content.Document.ContentStart, tbx_content.Document.ContentEnd).Text;
             header = drop_messageType.Text;
             sender = tbx_sender.Text;
+            subject = tbx_subject.Text;
 
             try {
                 switch (header)
