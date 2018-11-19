@@ -12,10 +12,16 @@ namespace CourseworkApplication
     {
         public List<Keyword> keywordList;
         public List<string> quarantineList;
+        public string csvPath = @"..\textwords.csv";
+
+        public void setCSVPath(string newpath)
+        {
+            this.csvPath = newpath;
+        }
 
         public void readFromCSV()
         {
-            using (var reader = new StreamReader(@"..\textwords.csv"))
+            using (var reader = new StreamReader(csvPath))
             {
                 List<Keyword> newlist = new List<Keyword>();
 

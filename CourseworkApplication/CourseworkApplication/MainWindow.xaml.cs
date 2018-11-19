@@ -50,7 +50,7 @@ namespace CourseworkApplication
                 {
                     case "SMS":
                         header = generateID("S");
-                        Sms mySms = new Sms(header, senderName, body, dataManager);
+                        Sms mySms = new Sms(header, senderName, body, dataManager, true);
                         messageType = "Sms";
                         tbx_output.Document.Blocks.Clear();
                         tbx_output.Document.Blocks.Add(new Paragraph(new Run(mySms.messageHeaderAccess)));

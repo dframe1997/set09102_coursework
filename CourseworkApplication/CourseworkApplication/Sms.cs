@@ -8,7 +8,7 @@ namespace CourseworkApplication
 {
     public class Sms : Message
     {
-        public Sms(string messageHeaderAccess, string senderAccess, string messageBodyAccess, DataManager dataManager)
+        public Sms(string messageHeaderAccess, string senderAccess, string messageBodyAccess, DataManager dataManager, Boolean saveAfterCreation)
         {
             this.messageHeader = messageHeaderAccess;
             this.dataManager = dataManager;
@@ -27,7 +27,10 @@ namespace CourseworkApplication
             if (validateInputs(messageBodyAccess))
             {
                 this.messageBody = keywordReplace(messageBodyAccess);
-                this.dataManager.saveToFile(this);
+                if (saveAfterCreation)
+                {
+                    this.dataManager.saveToFile(this);
+                }
             }
             else
             {
