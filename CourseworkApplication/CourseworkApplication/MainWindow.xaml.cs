@@ -21,7 +21,7 @@ namespace CourseworkApplication
     public partial class MainWindow : Window
     {
         string header;
-        string sender;
+        string senderName;
         string subject;
         string body;
         string messageType;
@@ -42,7 +42,7 @@ namespace CourseworkApplication
         {        
             body = new TextRange(tbx_content.Document.ContentStart, tbx_content.Document.ContentEnd).Text;
             header = drop_messageType.Text;
-            sender = tbx_sender.Text;
+            senderName = tbx_sender.Text;
             subject = tbx_subject.Text;
 
             try {
@@ -50,7 +50,7 @@ namespace CourseworkApplication
                 {
                     case "SMS":
                         header = generateID("S");
-                        Sms mySms = new Sms(header, sender, body, dataManager);
+                        Sms mySms = new Sms(header, senderName, body, dataManager);
                         messageType = "Sms";
                         tbx_output.Document.Blocks.Clear();
                         tbx_output.Document.Blocks.Add(new Paragraph(new Run(mySms.messageHeaderAccess)));
@@ -59,7 +59,7 @@ namespace CourseworkApplication
                         break;
                     case "Tweet":
                         header = "T" + drop_messageType.Text;
-                        Tweet myTweet = new Tweet(header, sender, body, dataManager);
+                        Tweet myTweet = new Tweet(header, senderName, body, dataManager);
                         messageType = "Tweet";
                         tbx_output.Document.Blocks.Clear();
                         tbx_output.Document.Blocks.Add(new Paragraph(new Run(myTweet.messageHeaderAccess)));
@@ -68,7 +68,7 @@ namespace CourseworkApplication
                         break;
                     case "Email":
                         header = "E" + drop_messageType.Text;
-                        Email myEmail = new Email(header, sender, subject, body, dataManager);
+                        Email myEmail = new Email(header, senderName, subject, body, dataManager);
                         messageType = "Email";
                         tbx_output.Document.Blocks.Clear();
                         tbx_output.Document.Blocks.Add(new Paragraph(new Run(myEmail.messageHeaderAccess)));

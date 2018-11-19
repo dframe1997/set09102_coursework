@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CourseworkApplication
 {
-    class Email: Message
+    public class Email: Message
     {
         string subject;
         public Email(string messageHeaderAccess, string senderAccess, string subject, string messageBodyAccess, DataManager dataManager)

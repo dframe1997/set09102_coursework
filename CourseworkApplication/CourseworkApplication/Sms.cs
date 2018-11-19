@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CourseworkApplication
 {
-    class Sms : Message
+    public class Sms : Message
     {
         public Sms(string messageHeaderAccess, string senderAccess, string messageBodyAccess, DataManager dataManager)
         {
@@ -17,7 +17,7 @@ namespace CourseworkApplication
             if (senderAccess != "")
             {
                 
-                this.sender = extractSender(messageBodyAccess);
+                this.sender = senderAccess;
             }
             else
             {

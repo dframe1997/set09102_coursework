@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CourseworkApplication
 {
-    abstract class Message
+    public abstract class Message
     {
         protected string messageHeader;
         protected string messageBody;

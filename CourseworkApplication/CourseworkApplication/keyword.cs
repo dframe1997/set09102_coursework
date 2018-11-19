@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CourseworkApplication
 {
-    class Keyword
+    public class Keyword
     {
         private string key;
         private string keyword;

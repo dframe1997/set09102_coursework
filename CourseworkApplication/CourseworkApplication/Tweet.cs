@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CourseworkApplication
 {
-    class Tweet: Message
+    public class Tweet: Message
     {
         public Tweet(string messageHeaderAccess, string senderAccess, string messageBodyAccess, DataManager dataManager)
         {

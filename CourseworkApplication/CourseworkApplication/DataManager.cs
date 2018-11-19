@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 
 namespace CourseworkApplication
 {
-    class DataManager
+    public class DataManager
     {
         public List<Keyword> keywordList;
         public List<string> quarantineList;
