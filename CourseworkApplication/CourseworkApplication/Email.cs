@@ -9,33 +9,48 @@ namespace CourseworkApplication
 {
     public class Email: Message
     {
-        string subject;
-        public Email(string messageHeaderAccess, string senderAccess, string subject, string messageBodyAccess, DataManager dataManager)
+        protected string subject;
+        protected Boolean saveAfterCreation;
+
+        public Email(string messageHeaderAccess, string senderAccess, string subjectAccess, string messageBodyAccess, DataManager dataManagerAccess, Boolean saveAfterCreation)
         {
             this.messageHeader = messageHeaderAccess;
-            this.dataManager = dataManager;
+            this.saveAfterCreation = saveAfterCreation;
 
-            if(sender != "" && subject != "")
+            if (dataManager != null)
             {
-                this.sender = senderAccess;
-                this.subject = subject;
+                this.dataManager = dataManagerAccess;
+            }
+            else
+            {
+                DataManager dataManager = new DataManager();
+                dataManager.readFromCSV();
+                this.dataManager = dataManager;
+            }
+
+            if(senderAccess != "" && subjectAccess != "")
+            {
+                if (validateSender(senderAccess))
+                {
+                    this.sender = senderAccess;
+                }
+                else
+                {
+                    throw new Exception("Please provide a valid email address.");
+                }
+                
+                if(subjectAccess.Length > 20)
+                {
+                    throw new Exception("Your subject is too long, the limit is 20 characters.");
+                }
+                this.subject = subjectAccess;
             }
             else
             {
                 throw new Exception("Please include an email address in the sender box and a subject with up to 20 characters in the subject box.");
             }
 
-            messageBodyAccess = messageBodyAccess.Substring(21);
-
-            if (validateInputs(messageBodyAccess))
-            {
-                this.messageBody = removeURLS(messageBodyAccess);
-                this.dataManager.saveToFile(this);
-            }
-            else
-            {
-                throw new Exception("Message too long. Please stay below 1028 characters (currently " + (messageBodyAccess.Length - 2) + ")"); //-2 for line ending characters
-            }
+            validateBody(messageBodyAccess);
         }
 
         public string removeURLS(string messageBody)
@@ -86,9 +101,44 @@ namespace CourseworkApplication
             }
         }
 
-        public override bool validateInputs(string messageBody)
+        public string subjectAccess
         {
-            if (messageBody.Length > 1030)
+            get
+            {
+                return subject;
+            }
+            set
+            {
+                subject = value;
+            }
+        }
+
+        public override bool validateBody(string messageBodyAccess)
+        {
+            if (messageBodyAccess.Length > 1030)
+            {
+                throw new Exception("Message too long. Please stay below 1028 characters (currently " + (messageBodyAccess.Length - 2) + ")"); //-2 for line ending characters
+            }
+            else if (messageBodyAccess == "")
+            {
+                throw new Exception("Please include a message.");
+            }
+            else
+            {
+                this.messageBody = removeURLS(messageBodyAccess);
+                if (saveAfterCreation)
+                {
+                    this.dataManager.saveToFile(this);
+                }
+                
+                return true;
+            }
+        }
+
+        public override bool validateSender(string sender)
+        {
+            Regex rgx = new Regex(@".*@.*\..{2,4}$");
+            if (!rgx.IsMatch(sender))
             {
                 return false;
             }

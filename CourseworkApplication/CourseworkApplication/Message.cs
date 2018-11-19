@@ -19,8 +19,10 @@ namespace CourseworkApplication
         public abstract string messageHeaderAccess { get; set; }
         public abstract string messageBodyAccess { get; set; }
         public abstract string senderAccess { get; set; }
+        //public abstract string subjectAccess { get; set; }
 
-        public abstract bool validateInputs(string messageBody);
+        public abstract bool validateSender(string sender);
+        public abstract bool validateBody(string messageBody);
 
         public abstract string encodeMessage();
 

@@ -25,6 +25,8 @@ namespace CourseworkApplication
         string subject;
         string body;
         string messageType;
+        string oldSubject = "";
+        Boolean isSIR = false;
         DataManager dataManager = new DataManager();
 
         public MainWindow()
@@ -35,6 +37,9 @@ namespace CourseworkApplication
 
         private void btn_clear_Click(object sender, RoutedEventArgs e)
         {
+            tbx_sender.Text = "";
+            if(!isSIR) tbx_subject.Text = "";
+
             tbx_content.Document.Blocks.Clear();
         }
 
@@ -53,41 +58,62 @@ namespace CourseworkApplication
                         Sms mySms = new Sms(header, senderName, body, dataManager, true);
                         messageType = "Sms";
                         tbx_output.Document.Blocks.Clear();
-                        tbx_output.Document.Blocks.Add(new Paragraph(new Run(mySms.messageHeaderAccess)));
-                        tbx_output.Document.Blocks.Add(new Paragraph(new Run(mySms.messageBodyAccess)));
-                        tbx_output.Document.Blocks.Add(new Paragraph(new Run(mySms.GetType().ToString())));
+                        tbx_output.Document.Blocks.Add(new Paragraph(new Run("Header: " + mySms.messageHeaderAccess)));
+                        tbx_output.Document.Blocks.Add(new Paragraph(new Run("Sender: " + mySms.senderAccess)));
+                        tbx_output.Document.Blocks.Add(new Paragraph(new Run("Body: " + mySms.messageBodyAccess)));
+                        tbx_output.Document.Blocks.Add(new Paragraph(new Run("Type: " + mySms.GetType().ToString())));
                         break;
                     case "Tweet":
-                        header = "T" + drop_messageType.Text;
-                        Tweet myTweet = new Tweet(header, senderName, body, dataManager);
+                        header = generateID("T");
+                        Tweet myTweet = new Tweet(header, senderName, body, dataManager, true);
                         messageType = "Tweet";
                         tbx_output.Document.Blocks.Clear();
-                        tbx_output.Document.Blocks.Add(new Paragraph(new Run(myTweet.messageHeaderAccess)));
-                        tbx_output.Document.Blocks.Add(new Paragraph(new Run(myTweet.messageBodyAccess)));
-                        tbx_output.Document.Blocks.Add(new Paragraph(new Run(myTweet.GetType().ToString())));
+                        tbx_output.Document.Blocks.Add(new Paragraph(new Run("Header: " + myTweet.messageHeaderAccess)));
+                        tbx_output.Document.Blocks.Add(new Paragraph(new Run("Sender: " + myTweet.senderAccess)));
+                        tbx_output.Document.Blocks.Add(new Paragraph(new Run("Body: " + myTweet.messageBodyAccess)));
+                        tbx_output.Document.Blocks.Add(new Paragraph(new Run("Type: " + myTweet.GetType().ToString())));
                         break;
                     case "Email":
-                        header = "E" + drop_messageType.Text;
-                        Email myEmail = new Email(header, senderName, subject, body, dataManager);
-                        messageType = "Email";
-                        tbx_output.Document.Blocks.Clear();
-                        tbx_output.Document.Blocks.Add(new Paragraph(new Run(myEmail.messageHeaderAccess)));
-                        tbx_output.Document.Blocks.Add(new Paragraph(new Run(myEmail.messageBodyAccess)));
-                        tbx_output.Document.Blocks.Add(new Paragraph(new Run(myEmail.GetType().ToString())));
+                        header = generateID("E");
+                        if (isSIR)
+                        {
+                            SIR myEmail = new SIR(header, senderName, subject, body, dataManager, true);
+                            messageType = "Email";
+                            tbx_output.Document.Blocks.Clear();
+                            tbx_output.Document.Blocks.Add(new Paragraph(new Run("Header: " + myEmail.messageHeaderAccess)));
+                            tbx_output.Document.Blocks.Add(new Paragraph(new Run("Sender: " + myEmail.senderAccess)));
+                            tbx_output.Document.Blocks.Add(new Paragraph(new Run("Subject: " + myEmail.subjectAccess)));
+                            tbx_output.Document.Blocks.Add(new Paragraph(new Run("Body: " + myEmail.messageBodyAccess)));
+                            tbx_output.Document.Blocks.Add(new Paragraph(new Run("Type: " + myEmail.GetType().ToString())));
+                        }
+                        else
+                        {
+                            Email myEmail = new Email(header, senderName, subject, body, dataManager, true);
+                            messageType = "Email";
+                            tbx_output.Document.Blocks.Clear();
+                            tbx_output.Document.Blocks.Add(new Paragraph(new Run("Header: " + myEmail.messageHeaderAccess)));
+                            tbx_output.Document.Blocks.Add(new Paragraph(new Run("Sender: " + myEmail.senderAccess)));
+                            tbx_output.Document.Blocks.Add(new Paragraph(new Run("Subject: " + myEmail.subjectAccess)));
+                            tbx_output.Document.Blocks.Add(new Paragraph(new Run("Body: " + myEmail.messageBodyAccess)));
+                            tbx_output.Document.Blocks.Add(new Paragraph(new Run("Type: " + myEmail.GetType().ToString())));
+                        }
                         break;
                     default:
                         messageType = "Unknown";
                         tbx_output.Document.Blocks.Clear();
-                        tbx_output.Document.Blocks.Add(new Paragraph(new Run("In the header box, please specify the type of message you wish to send: E for email, S for sms or T for tweet followed by a 9 digit message ID.")));
-                        break;
+                        tbx_output.Document.Blocks.Add(new Paragraph(new Run("In the header box, please specify the type of message you wish to send: Email, Sms or Tweet.")));
+                        break;     
                 }
+                tbx_sender.Text = "";
+                if (!isSIR) tbx_subject.Text = "";
+
+                tbx_content.Document.Blocks.Clear();
             }
             catch(Exception ex)
             {
                 tbx_output.Document.Blocks.Clear();
                 tbx_output.Document.Blocks.Add(new Paragraph(new Run(ex.Message)));
             }
-            
         }
 
         private void drop_messageType_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -112,6 +138,27 @@ namespace CourseworkApplication
                 messageID += random.Next(0, 9).ToString();
             }
             return messageID;
+        }
+
+        private void Cbx_SignificantIncidentReport_Checked(object sender, RoutedEventArgs e)
+        {
+            if(drop_messageType.Text == "Email")
+            {
+                oldSubject = tbx_subject.Text;
+                tbx_subject.Text = "SIR " + DateTime.Now.ToString("d/M/yy").ToString();
+                tbx_subject.IsEnabled = false;
+            }
+            isSIR = true;
+        }
+
+        private void Cbx_SignificantIncidentReport_Unchecked(object sender, RoutedEventArgs e)
+        {
+            if(drop_messageType.Text == "Email")
+            {
+                tbx_subject.Text = oldSubject;
+                tbx_subject.IsEnabled = true;
+            }
+            isSIR = false;
         }
     }
 }

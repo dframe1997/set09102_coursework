@@ -61,6 +61,7 @@
     <Compile Include="DataManager.cs" />
     <Compile Include="Email.cs" />
     <Compile Include="keyword.cs" />
+    <Compile Include="SIR.cs" />
     <Compile Include="Sms.cs" />
     <Compile Include="Tweet.cs" />
     <Page Include="MainWindow.xaml">

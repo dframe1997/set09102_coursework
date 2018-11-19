@@ -8,23 +8,40 @@ namespace CourseworkApplication
 {
     public class Sms : Message
     {
-        public Sms(string messageHeaderAccess, string senderAccess, string messageBodyAccess, DataManager dataManager, Boolean saveAfterCreation)
+        public Sms(string messageHeaderAccess, string senderAccess, string messageBodyAccess, DataManager dataManagerAccess, Boolean saveAfterCreation)
         {
             this.messageHeader = messageHeaderAccess;
-            this.dataManager = dataManager;
+
+            if (dataManager != null)
+            {
+                this.dataManager = dataManagerAccess;
+            }
+            else
+            {
+                DataManager dataManager = new DataManager();
+                dataManager.readFromCSV();
+                this.dataManager = dataManager;
+            }
+
             this.keywordList = this.dataManager.keywordList;
 
             if (senderAccess != "")
             {
-                
-                this.sender = senderAccess;
+                if (validateSender(senderAccess))
+                {
+                    this.sender = senderAccess;
+                }
+                else
+                {
+                    throw new Exception("Please ensure that your phone number is between 8 and 16 digits, and that it is a number.");
+                }
             }
             else
             {
                 throw new Exception("Please include a phone number in the sender box.");
             }
 
-            if (validateInputs(messageBodyAccess))
+            if (validateBody(messageBodyAccess))
             {
                 this.messageBody = keywordReplace(messageBodyAccess);
                 if (saveAfterCreation)
@@ -73,9 +90,33 @@ namespace CourseworkApplication
             }
         }
 
-        public override bool validateInputs(string messageBody)
+        /*public override string subjectAccess
+        {
+            get
+            {
+                return "N/A";
+            }
+            set
+            {
+                
+            }
+        }*/
+
+        public override bool validateBody(string messageBody)
         {
             if (messageBody.Length > 142) //2 for the end of string characters /r and /n
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        public override bool validateSender(string sender)
+        {
+            if (sender.Length > 16 || sender.Length < 8 || !double.TryParse(sender, out double number)) //Maximum/minimum(including country code) characters in a international phone number and checking that the input is a number
             {
                 return false;
             }
