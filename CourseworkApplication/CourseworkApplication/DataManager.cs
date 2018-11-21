@@ -11,7 +11,7 @@ namespace CourseworkApplication
     public class DataManager
     {
         public List<Keyword> keywordList;
-        public List<string> quarantineList;
+        public List<string> quarantineList = new List<string>();
         public string csvPath = @"..\textwords.csv";
 
         public void setCSVPath(string newpath)

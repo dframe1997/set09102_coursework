@@ -77,14 +77,14 @@ namespace CourseworkApplication
                         header = generateID("E");
                         if (isSIR)
                         {
-                            SIR myEmail = new SIR(header, senderName, subject, body, dataManager, true);
+                            SIR mySir = new SIR(header, senderName, subject, body, dataManager, true);
                             messageType = "Email";
                             tbx_output.Document.Blocks.Clear();
-                            tbx_output.Document.Blocks.Add(new Paragraph(new Run("Header: " + myEmail.messageHeaderAccess)));
-                            tbx_output.Document.Blocks.Add(new Paragraph(new Run("Sender: " + myEmail.senderAccess)));
-                            tbx_output.Document.Blocks.Add(new Paragraph(new Run("Subject: " + myEmail.subjectAccess)));
-                            tbx_output.Document.Blocks.Add(new Paragraph(new Run("Body: " + myEmail.messageBodyAccess)));
-                            tbx_output.Document.Blocks.Add(new Paragraph(new Run("Type: " + myEmail.GetType().ToString())));
+                            tbx_output.Document.Blocks.Add(new Paragraph(new Run("Header: " + mySir.messageHeaderAccess)));
+                            tbx_output.Document.Blocks.Add(new Paragraph(new Run("Sender: " + mySir.senderAccess)));
+                            tbx_output.Document.Blocks.Add(new Paragraph(new Run("Subject: " + mySir.subjectAccess)));
+                            tbx_output.Document.Blocks.Add(new Paragraph(new Run("Body: " + mySir.messageBodyAccess)));
+                            tbx_output.Document.Blocks.Add(new Paragraph(new Run("Type: " + mySir.GetType().ToString())));
                         }
                         else
                         {

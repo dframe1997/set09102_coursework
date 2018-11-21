@@ -17,7 +17,7 @@ namespace CourseworkApplication
             this.messageHeader = messageHeaderAccess;
             this.saveAfterCreation = saveAfterCreation;
 
-            if (dataManager != null)
+            if (dataManagerAccess != null)
             {
                 this.dataManager = dataManagerAccess;
             }
@@ -59,7 +59,7 @@ namespace CourseworkApplication
             string pattern = @"http[^ ]*";
             foreach(Match match in Regex.Matches(messageBody, pattern))
             {
-                dataManager.quarantineList.Add(match.Value);
+                this.dataManager.quarantineList.Add(match.Value);
             }
             messageBody = Regex.Replace(messageBody, pattern, "<URL Quarantined>", RegexOptions.IgnoreCase);
             return messageBody;
