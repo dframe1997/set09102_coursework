@@ -18,7 +18,8 @@ namespace CourseworkApplication
 
         public override bool validateBody(string messageBodyAccess)
         {
-            this.sortCode = messageBodyAccess.Split(new[] { Environment.NewLine }, StringSplitOptions.None)[0];
+            if(this.sortCode == "") this.sortCode = messageBodyAccess.Split(new[] { Environment.NewLine }, StringSplitOptions.None)[0];
+
             Regex rgx = new Regex(@"..-..-..");
 
             if (!rgx.IsMatch(this.sortCode))
