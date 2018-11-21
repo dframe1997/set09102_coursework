@@ -90,18 +90,6 @@ namespace CourseworkApplication
             }
         }
 
-        /*public override string subjectAccess
-        {
-            get
-            {
-                return "N/A";
-            }
-            set
-            {
-                
-            }
-        }*/
-
         public override bool validateBody(string messageBody)
         {
             if (messageBody.Length > 142) //2 for the end of string characters /r and /n
@@ -124,11 +112,6 @@ namespace CourseworkApplication
             {
                 return true;
             }
-        }
-
-        public override string encodeMessage()
-        {
-            return "";
         }
     }
 }

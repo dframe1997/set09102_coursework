@@ -147,10 +147,5 @@ namespace CourseworkApplication
                 return true;
             }
         }
-
-        public override string encodeMessage()
-        {
-            return "";
-        }
     }
 }

@@ -12,19 +12,15 @@ namespace CourseworkApplication
         protected string messageHeader;
         protected string messageBody;
         protected string sender;
-        protected string senderError = "SENDER ERROR";
         protected List<Keyword> keywordList = new List<Keyword>();
         protected DataManager dataManager;
 
         public abstract string messageHeaderAccess { get; set; }
         public abstract string messageBodyAccess { get; set; }
         public abstract string senderAccess { get; set; }
-        //public abstract string subjectAccess { get; set; }
 
         public abstract bool validateSender(string sender);
         public abstract bool validateBody(string messageBody);
-
-        public abstract string encodeMessage();
 
         public string keywordReplace(string messageBody)
         {
