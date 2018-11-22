@@ -2,32 +2,22 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace CourseworkApplication
 {
     public class Tweet: Message
     {
-        public Tweet(string messageHeaderAccess, string senderAccess, string messageBodyAccess, DataManager dataManagerAccess, Boolean saveAfterCreation)
+        public Tweet(string messageHeaderAccess, string senderAccess, string messageBodyAccess, Boolean saveAfterCreation)
         {
             this.messageHeader = messageHeaderAccess;
 
-            if (dataManager != null)
-            {
-                this.dataManager = dataManagerAccess;
-            }
-            else
-            {
-                DataManager dataManager = new DataManager();
-                dataManager.readFromCSV();
-                this.dataManager = dataManager;
-            }
-
+            dataManager.readFromCSV();
             this.keywordList = this.dataManager.keywordList;
 
             if (senderAccess != "")
-            {
-                
+            { 
                 if (validateSender(senderAccess))
                 {
                     this.sender = senderAccess;
@@ -44,8 +34,26 @@ namespace CourseworkApplication
             if (validateBody(messageBodyAccess))
             {
                 this.messageBody = keywordReplace(messageBodyAccess);
+
                 if (saveAfterCreation)
                 {
+                    //https://stackoverflow.com/questions/13869642/grabing-hashtagged-word-from-a-string-using-regex
+                    var regex = new Regex(@"(?<=#)\w+");
+                    var matches = regex.Matches(this.messageBody);
+
+                    foreach (Match m in matches)
+                    {
+                        this.dataManager.hashtagList.Add(m.Value);
+                    }
+
+                    regex = new Regex(@"(?<=@)\w+");
+                    matches = regex.Matches(this.messageBody);
+
+                    foreach (Match m in matches)
+                    {
+                        this.dataManager.mentionList.Add(m.Value);
+                    }
+
                     this.dataManager.saveToFile(this);
                 }
             }

@@ -12,21 +12,10 @@ namespace CourseworkApplication
         protected string subject;
         protected Boolean saveAfterCreation;
 
-        public Email(string messageHeaderAccess, string senderAccess, string subjectAccess, string messageBodyAccess, DataManager dataManagerAccess, Boolean saveAfterCreation)
+        public Email(string messageHeaderAccess, string senderAccess, string subjectAccess, string messageBodyAccess, Boolean saveAfterCreation)
         {
             this.messageHeader = messageHeaderAccess;
             this.saveAfterCreation = saveAfterCreation;
-
-            if (dataManagerAccess != null)
-            {
-                this.dataManager = dataManagerAccess;
-            }
-            else
-            {
-                DataManager dataManager = new DataManager();
-                dataManager.readFromCSV();
-                this.dataManager = dataManager;
-            }
 
             if(senderAccess != "" && subjectAccess != "")
             {
@@ -55,12 +44,16 @@ namespace CourseworkApplication
 
         public string removeURLS(string messageBody)
         {
-            //https://stackoverflow.com/questions/2013124/regex-matching-up-to-the-first-occurrence-of-a-character
             string pattern = @"http[^ ]*";
-            foreach(Match match in Regex.Matches(messageBody, pattern))
+            if (saveAfterCreation)
             {
-                this.dataManager.quarantineList.Add(match.Value);
+                //https://stackoverflow.com/questions/2013124/regex-matching-up-to-the-first-occurrence-of-a-character
+                foreach (Match match in Regex.Matches(messageBody, pattern))
+                {
+                    this.dataManager.quarantineList.Add(match.Value);
+                }
             }
+            
             messageBody = Regex.Replace(messageBody, pattern, "<URL Quarantined>", RegexOptions.IgnoreCase);
             return messageBody;
         }

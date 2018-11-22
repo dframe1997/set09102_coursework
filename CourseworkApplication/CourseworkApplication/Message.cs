@@ -13,7 +13,7 @@ namespace CourseworkApplication
         protected string messageBody;
         protected string sender;
         protected List<Keyword> keywordList = new List<Keyword>();
-        protected DataManager dataManager;
+        protected DataManager dataManager = DataManager.Instance;
 
         public abstract string messageHeaderAccess { get; set; }
         public abstract string messageBodyAccess { get; set; }

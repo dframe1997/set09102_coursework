@@ -8,11 +8,26 @@ using Newtonsoft.Json;
 
 namespace CourseworkApplication
 {
-    public class DataManager
+    public sealed class DataManager
     {
         public List<Keyword> keywordList;
-        public List<string> quarantineList = new List<string>();
         public string csvPath = @"..\textwords.csv";
+        public string listString;
+
+        public List<SIRItem> SIRList = new List<SIRItem>();
+        public List<string> hashtagList = new List<string>();
+        public List<string> quarantineList = new List<string>();
+        public List<string> mentionList = new List<string>();
+
+        private static readonly Lazy<DataManager> dataManager = new Lazy<DataManager>(() => new DataManager());
+
+        public static DataManager Instance
+        {
+            get
+            {
+                return dataManager.Value;
+            }
+        }
 
         public void setCSVPath(string newpath)
         {
@@ -58,6 +73,41 @@ namespace CourseworkApplication
                 json = JsonConvert.SerializeObject(messageList, jset);
                 file.WriteLine(json);
             }
+        }
+
+        public string generateListString()
+        {
+            listString = "";
+            listString += @"SIR List
+";
+            foreach(SIRItem s in SIRList)
+            {
+                listString += " sortCode: " + s.sortCodeAccess + ", natureOfIncident: " + s.natureOfIncidentAccess + @"
+";
+            }
+            listString += @"Hashtag List
+";
+            foreach (string h in hashtagList)
+            {
+                listString += " #" + h + @"
+";
+            }
+            
+            listString += @"Quarantine List
+";
+            foreach (string q in quarantineList)
+            {
+                listString += " " + q + @"
+                    ";
+            }
+            listString += @"Mention List
+";
+            foreach (string m in mentionList)
+            {
+                listString += " @" + m + @"
+";
+            }
+            return listString;
         }
     }
 }

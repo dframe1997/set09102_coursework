@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CourseworkApplication"
         mc:Ignorable="d"
-        Title="Messager" Height="365.099" Width="649.418">
+        Title="Messager" Height="365.099" Width="898.827">
     <Grid>
         <RichTextBox x:Name="tbx_content" HorizontalAlignment="Left" Height="133" Margin="10,156,0,0" VerticalAlignment="Top" Width="361">
             <FlowDocument/>
@@ -29,6 +29,11 @@
         <Label Content="Type" HorizontalAlignment="Left" Margin="10,38,0,0" VerticalAlignment="Top"/>
         <Label Content="Enter your message below" HorizontalAlignment="Left" Margin="116,125,0,0" VerticalAlignment="Top"/>
         <CheckBox x:Name="cbx_SignificantIncidentReport" Content="SIR?" HorizontalAlignment="Left" Margin="329,101,0,0" VerticalAlignment="Top" Checked="Cbx_SignificantIncidentReport_Checked" Unchecked="Cbx_SignificantIncidentReport_Unchecked"/>
+        <Label Content="Lists" HorizontalAlignment="Left" Margin="642,10,0,0" VerticalAlignment="Top"/>
+        <RichTextBox x:Name="tbx_lists" HorizontalAlignment="Left" Height="248" Margin="638,41,0,0" VerticalAlignment="Top" Width="245">
+            <FlowDocument/>
+        </RichTextBox>
+        <Button x:Name="btn_showLists" Content="Show Lists" HorizontalAlignment="Left" Margin="638,294,0,0" VerticalAlignment="Top" Width="245" Click="Btn_showLists_Click"/>
 
     </Grid>
 </Window>

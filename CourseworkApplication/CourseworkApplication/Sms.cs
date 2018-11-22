@@ -8,22 +8,11 @@ namespace CourseworkApplication
 {
     public class Sms : Message
     {
-        public Sms(string messageHeaderAccess, string senderAccess, string messageBodyAccess, DataManager dataManagerAccess, Boolean saveAfterCreation)
+        public Sms(string messageHeaderAccess, string senderAccess, string messageBodyAccess, Boolean saveAfterCreation)
         {
-            this.messageHeader = messageHeaderAccess;
-
-            if (dataManager != null)
-            {
-                this.dataManager = dataManagerAccess;
-            }
-            else
-            {
-                DataManager dataManager = new DataManager();
-                dataManager.readFromCSV();
-                this.dataManager = dataManager;
-            }
-
-            this.keywordList = this.dataManager.keywordList;
+            this.messageHeader = messageHeaderAccess;                     
+            dataManager.readFromCSV();
+            this.keywordList = dataManager.keywordList;
 
             if (senderAccess != "")
             {

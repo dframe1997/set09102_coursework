@@ -27,7 +27,7 @@ namespace CourseworkApplication
         string messageType;
         string oldSubject = "";
         Boolean isSIR = false;
-        DataManager dataManager = new DataManager();
+        DataManager dataManager = DataManager.Instance;
 
         public MainWindow()
         {
@@ -55,7 +55,7 @@ namespace CourseworkApplication
                 {
                     case "SMS":
                         header = generateID("S");
-                        Sms mySms = new Sms(header, senderName, body, dataManager, true);
+                        Sms mySms = new Sms(header, senderName, body, true);
                         messageType = "Sms";
                         tbx_output.Document.Blocks.Clear();
                         tbx_output.Document.Blocks.Add(new Paragraph(new Run("Header: " + mySms.messageHeaderAccess)));
@@ -65,7 +65,7 @@ namespace CourseworkApplication
                         break;
                     case "Tweet":
                         header = generateID("T");
-                        Tweet myTweet = new Tweet(header, senderName, body, dataManager, true);
+                        Tweet myTweet = new Tweet(header, senderName, body, true);
                         messageType = "Tweet";
                         tbx_output.Document.Blocks.Clear();
                         tbx_output.Document.Blocks.Add(new Paragraph(new Run("Header: " + myTweet.messageHeaderAccess)));
@@ -77,7 +77,7 @@ namespace CourseworkApplication
                         header = generateID("E");
                         if (isSIR)
                         {
-                            SIR mySir = new SIR(header, senderName, subject, body, dataManager, true);
+                            SIR mySir = new SIR(header, senderName, subject, body, true);
                             messageType = "Email";
                             tbx_output.Document.Blocks.Clear();
                             tbx_output.Document.Blocks.Add(new Paragraph(new Run("Header: " + mySir.messageHeaderAccess)));
@@ -88,7 +88,7 @@ namespace CourseworkApplication
                         }
                         else
                         {
-                            Email myEmail = new Email(header, senderName, subject, body, dataManager, true);
+                            Email myEmail = new Email(header, senderName, subject, body, true);
                             messageType = "Email";
                             tbx_output.Document.Blocks.Clear();
                             tbx_output.Document.Blocks.Add(new Paragraph(new Run("Header: " + myEmail.messageHeaderAccess)));
@@ -159,6 +159,12 @@ namespace CourseworkApplication
                 tbx_subject.IsEnabled = true;
             }
             isSIR = false;
+        }
+
+        private void Btn_showLists_Click(object sender, RoutedEventArgs e)
+        {
+            tbx_lists.Document.Blocks.Clear();
+            tbx_lists.Document.Blocks.Add(new Paragraph(new Run(dataManager.generateListString())));
         }
     }
 }

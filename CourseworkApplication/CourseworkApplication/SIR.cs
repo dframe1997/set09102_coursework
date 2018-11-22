@@ -14,7 +14,7 @@ namespace CourseworkApplication
         public string natureOfIncident = "";
         private string[] possibleIncidents = new[] { "Theft", "Staff Attack", "ATM Theft", "Raid", "Customer Attack", "Staff Abuse", "Bomb Threat", "Terrorism", "Suspicious Incident", "Intelligence", "Cash Loss" };
 
-        public SIR(string messageHeaderAccess, string senderAccess, string subjectAccess, string messageBodyAccess, DataManager dataManagerAccess, Boolean saveAfterCreation) : base(messageHeaderAccess, senderAccess, subjectAccess, messageBodyAccess, dataManagerAccess, saveAfterCreation){}
+        public SIR(string messageHeaderAccess, string senderAccess, string subjectAccess, string messageBodyAccess, Boolean saveAfterCreation) : base(messageHeaderAccess, senderAccess, subjectAccess, messageBodyAccess, saveAfterCreation){}
 
         public override bool validateBody(string messageBodyAccess)
         {
@@ -51,6 +51,7 @@ namespace CourseworkApplication
                 this.messageBody = removeURLS(messageBodyAccess);
                 if (saveAfterCreation)
                 {
+                    this.dataManager.SIRList.Add(new SIRItem(this.sortCode, this.natureOfIncident));
                     this.dataManager.saveToFile(this);
                 }
 
