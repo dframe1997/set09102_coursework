@@ -60,6 +60,7 @@
     </ApplicationDefinition>
     <Compile Include="DataManager.cs" />
     <Compile Include="Email.cs" />
+    <Compile Include="Hashtag.cs" />
     <Compile Include="Keyword.cs" />
     <Compile Include="SIR.cs" />
     <Compile Include="SIRItem.cs" />

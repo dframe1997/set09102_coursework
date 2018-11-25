@@ -13,9 +13,11 @@ namespace CourseworkApplication
         public List<Keyword> keywordList;
         public string csvPath = @"..\textwords.csv";
         public string listString;
+        public int messageNum;
+        public List<Message> messageList = new List<Message>();
 
         public List<SIRItem> SIRList = new List<SIRItem>();
-        public List<string> hashtagList = new List<string>();
+        public List<Hashtag> hashtagList = new List<Hashtag>();
         public List<string> quarantineList = new List<string>();
         public List<string> mentionList = new List<string>();
 
@@ -55,17 +57,22 @@ namespace CourseworkApplication
         public void saveToFile(Message message)
         {
             var jset = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.All };
-            List<Message> messageList = new List<Message>();
+            
             string json;
+            /*messageNum = 0; //All the messages will be read in again, so we need to set the counter backward - not to 0 as this new one isn't in the file yet, so we set it to 1.
 
             if (File.Exists(@"..\output.json"))
             {
+                messageList.Clear();
+
                 using (var reader = new StreamReader(@"..\output.json"))
                 {
                     json = reader.ReadLine();
                     messageList = JsonConvert.DeserializeObject<List<Message>>(json, jset);
                 }
-            }
+            }*/
+
+            readFromJSON();
             
             using (StreamWriter file = new StreamWriter(@"..\output.json"))
             {
@@ -82,25 +89,28 @@ namespace CourseworkApplication
 ";
             foreach(SIRItem s in SIRList)
             {
-                listString += " sortCode: " + s.sortCodeAccess + ", natureOfIncident: " + s.natureOfIncidentAccess + @"
+                listString += " sortCode: " + s.sortCodeAccess + ", NOI: " + s.natureOfIncidentAccess + @"
 ";
             }
-            listString += @"Hashtag List
+            listString += @"
+Hashtag List
 ";
-            foreach (string h in hashtagList)
+            foreach (Hashtag h in hashtagList)
             {
-                listString += " #" + h + @"
+                listString += " #" + h.hashtagTextAccess + @"
 ";
             }
             
-            listString += @"Quarantine List
+            listString += @"
+Quarantine List
 ";
             foreach (string q in quarantineList)
             {
                 listString += " " + q + @"
-                    ";
+";
             }
-            listString += @"Mention List
+            listString += @"
+Mention List
 ";
             foreach (string m in mentionList)
             {
@@ -109,5 +119,22 @@ namespace CourseworkApplication
             }
             return listString;
         }
-    }
+
+        public List<Message> readFromJSON()
+        {
+            messageNum = 0; //All the messages will be read in again, so we need to set the counter backward to 0.
+            
+            if (File.Exists(@"..\output.json"))
+            {
+                string json;
+                var jset = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.All };
+                using (var reader = new StreamReader(@"..\output.json"))
+                {
+                    json = reader.ReadLine();
+                    messageList = JsonConvert.DeserializeObject<List<Message>>(json, jset);
+                }
+            }
+            return messageList;
+        }
+    }  
 }

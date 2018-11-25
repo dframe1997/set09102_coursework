@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace CourseworkApplication
@@ -33,6 +34,11 @@ namespace CourseworkApplication
             if (validateBody(messageBodyAccess))
             {
                 this.messageBody = keywordReplace(messageBodyAccess);
+
+                this.dataManager.messageNum++;
+
+                this.messageHeader = "S" + this.dataManager.messageNum.ToString();
+
                 if (saveAfterCreation)
                 {
                     this.dataManager.saveToFile(this);
@@ -81,6 +87,7 @@ namespace CourseworkApplication
 
         public override bool validateBody(string messageBody)
         {
+            messageBody = Regex.Replace(messageBody, @" ?\<.{0,100}?\>", string.Empty); //Up to 100 characters will be ignored for acronyms
             if (messageBody.Length > 142) //2 for the end of string characters /r and /n
             {
                 return false;

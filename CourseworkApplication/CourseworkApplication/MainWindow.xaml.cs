@@ -28,11 +28,24 @@ namespace CourseworkApplication
         string oldSubject = "";
         Boolean isSIR = false;
         DataManager dataManager = DataManager.Instance;
+        int currentVisibleMessage = 0;
 
         public MainWindow()
         {
             InitializeComponent();
             dataManager.readFromCSV();
+            dataManager.readFromJSON();
+            if(dataManager.messageList.Count > 0)
+            {
+                showMessage(0);
+            }
+            if(dataManager.messageList.Count > 1)
+            {
+                btn_next.IsEnabled = true;
+            }
+
+            tbx_lists.Document.Blocks.Clear();
+            tbx_lists.Document.Blocks.Add(new Paragraph(new Run(dataManager.generateListString())));
         }
 
         private void btn_clear_Click(object sender, RoutedEventArgs e)
@@ -50,13 +63,19 @@ namespace CourseworkApplication
             senderName = tbx_sender.Text;
             subject = tbx_subject.Text;
 
+            dataManager.messageList.Clear();
+            dataManager.hashtagList.Clear();
+            dataManager.mentionList.Clear();
+            dataManager.quarantineList.Clear();
+            dataManager.SIRList.Clear();
+
             try {
                 switch (header)
                 {
                     case "SMS":
-                        header = generateID("S");
-                        Sms mySms = new Sms(header, senderName, body, true);
+                        Sms mySms = new Sms("", senderName, body, true);
                         messageType = "Sms";
+
                         tbx_output.Document.Blocks.Clear();
                         tbx_output.Document.Blocks.Add(new Paragraph(new Run("Header: " + mySms.messageHeaderAccess)));
                         tbx_output.Document.Blocks.Add(new Paragraph(new Run("Sender: " + mySms.senderAccess)));
@@ -64,9 +83,9 @@ namespace CourseworkApplication
                         tbx_output.Document.Blocks.Add(new Paragraph(new Run("Type: " + mySms.GetType().ToString())));
                         break;
                     case "Tweet":
-                        header = generateID("T");
-                        Tweet myTweet = new Tweet(header, senderName, body, true);
+                        Tweet myTweet = new Tweet("", senderName, body, true);
                         messageType = "Tweet";
+
                         tbx_output.Document.Blocks.Clear();
                         tbx_output.Document.Blocks.Add(new Paragraph(new Run("Header: " + myTweet.messageHeaderAccess)));
                         tbx_output.Document.Blocks.Add(new Paragraph(new Run("Sender: " + myTweet.senderAccess)));
@@ -74,27 +93,30 @@ namespace CourseworkApplication
                         tbx_output.Document.Blocks.Add(new Paragraph(new Run("Type: " + myTweet.GetType().ToString())));
                         break;
                     case "Email":
-                        header = generateID("E");
                         if (isSIR)
                         {
-                            SIR mySir = new SIR(header, senderName, subject, body, true);
+                            SIR mySir = new SIR("", "", "", senderName, subject, body, true);
                             messageType = "Email";
+
                             tbx_output.Document.Blocks.Clear();
                             tbx_output.Document.Blocks.Add(new Paragraph(new Run("Header: " + mySir.messageHeaderAccess)));
                             tbx_output.Document.Blocks.Add(new Paragraph(new Run("Sender: " + mySir.senderAccess)));
                             tbx_output.Document.Blocks.Add(new Paragraph(new Run("Subject: " + mySir.subjectAccess)));
-                            tbx_output.Document.Blocks.Add(new Paragraph(new Run("Body: " + mySir.messageBodyAccess)));
+                            tbx_output.Document.Blocks.Add(new Paragraph(new Run("Sort Code: " + mySir.sortCodeAccess)));
+                            tbx_output.Document.Blocks.Add(new Paragraph(new Run("Nature of incident: " + mySir.natureOfIncidentAccess)));
+                            tbx_output.Document.Blocks.Add(new Paragraph(new Run("Body: " + mySir.censoredBodyAccess)));
                             tbx_output.Document.Blocks.Add(new Paragraph(new Run("Type: " + mySir.GetType().ToString())));
                         }
                         else
                         {
-                            Email myEmail = new Email(header, senderName, subject, body, true);
+                            Email myEmail = new Email("", senderName, subject, body, true);
                             messageType = "Email";
+
                             tbx_output.Document.Blocks.Clear();
                             tbx_output.Document.Blocks.Add(new Paragraph(new Run("Header: " + myEmail.messageHeaderAccess)));
                             tbx_output.Document.Blocks.Add(new Paragraph(new Run("Sender: " + myEmail.senderAccess)));
                             tbx_output.Document.Blocks.Add(new Paragraph(new Run("Subject: " + myEmail.subjectAccess)));
-                            tbx_output.Document.Blocks.Add(new Paragraph(new Run("Body: " + myEmail.messageBodyAccess)));
+                            tbx_output.Document.Blocks.Add(new Paragraph(new Run("Body: " + myEmail.censoredBodyAccess)));
                             tbx_output.Document.Blocks.Add(new Paragraph(new Run("Type: " + myEmail.GetType().ToString())));
                         }
                         break;
@@ -108,6 +130,17 @@ namespace CourseworkApplication
                 if (!isSIR) tbx_subject.Text = "";
 
                 tbx_content.Document.Blocks.Clear();
+
+                currentVisibleMessage = dataManager.messageList.Count - 1;
+                btn_next.IsEnabled = false;
+
+                if (dataManager.messageList.Count > 1)
+                {
+                    btn_prev.IsEnabled = true;
+                }
+
+                tbx_lists.Document.Blocks.Clear();
+                tbx_lists.Document.Blocks.Add(new Paragraph(new Run(dataManager.generateListString())));
             }
             catch(Exception ex)
             {
@@ -121,23 +154,13 @@ namespace CourseworkApplication
             if(drop_messageType.SelectedValue.ToString().Substring(drop_messageType.SelectedValue.ToString().IndexOf(" ")).Substring(1) == "Email")
             {
                 tbx_subject.IsEnabled = true;
+                cbx_SignificantIncidentReport.IsEnabled = true;
             }
             else
             {
                 tbx_subject.IsEnabled = false;
+                cbx_SignificantIncidentReport.IsEnabled = false;
             }
-        }
-
-        private string generateID(string startChar)
-        {
-            string messageID = startChar;
-            Random random = new Random();
-            //https://stackoverflow.com/questions/7055489/how-to-generate-a-random-10-digit-number-in-c
-            for (int i = 0; i < 9; i++)
-            {
-                messageID += random.Next(0, 9).ToString();
-            }
-            return messageID;
         }
 
         private void Cbx_SignificantIncidentReport_Checked(object sender, RoutedEventArgs e)
@@ -161,10 +184,52 @@ namespace CourseworkApplication
             isSIR = false;
         }
 
-        private void Btn_showLists_Click(object sender, RoutedEventArgs e)
+        private void showMessage(int messageID)
         {
-            tbx_lists.Document.Blocks.Clear();
-            tbx_lists.Document.Blocks.Add(new Paragraph(new Run(dataManager.generateListString())));
+            dynamic m = dataManager.messageList[messageID];
+            
+            tbx_output.Document.Blocks.Clear();
+            tbx_output.Document.Blocks.Add(new Paragraph(new Run("Header: " + m.messageHeaderAccess)));
+            tbx_output.Document.Blocks.Add(new Paragraph(new Run("Sender: " + m.senderAccess)));
+
+            if (dataManager.messageList[messageID] is Email)
+            {
+                tbx_output.Document.Blocks.Add(new Paragraph(new Run("Subject: " + m.subjectAccess)));
+                if (dataManager.messageList[messageID] is SIR)
+                {
+                    tbx_output.Document.Blocks.Add(new Paragraph(new Run("Sort Code: " + m.sortCodeAccess)));
+                    tbx_output.Document.Blocks.Add(new Paragraph(new Run("Nature of incident: " + m.natureOfIncidentAccess)));
+                }
+                tbx_output.Document.Blocks.Add(new Paragraph(new Run("Body: " + m.censoredBodyAccess)));
+            }
+            else
+            {
+                tbx_output.Document.Blocks.Add(new Paragraph(new Run("Body: " + m.messageBodyAccess)));
+            }         
+            
+            tbx_output.Document.Blocks.Add(new Paragraph(new Run("Type: " + m.GetType().ToString())));
+        }
+
+        private void btn_next_Click(object sender, RoutedEventArgs e)
+        {
+            currentVisibleMessage++;
+            if (dataManager.messageList.Count <= currentVisibleMessage+1)
+            {
+                btn_next.IsEnabled = false;
+            }
+            btn_prev.IsEnabled = true;
+            showMessage(currentVisibleMessage);
+        }
+
+        private void btn_prev_Click(object sender, RoutedEventArgs e)
+        {
+            currentVisibleMessage--;
+            if (currentVisibleMessage <= 0)
+            {
+                btn_prev.IsEnabled = false;
+            }
+            btn_next.IsEnabled = true;
+            showMessage(currentVisibleMessage);
         }
     }
 }

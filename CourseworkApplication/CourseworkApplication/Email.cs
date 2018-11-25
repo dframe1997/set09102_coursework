@@ -11,6 +11,7 @@ namespace CourseworkApplication
     {
         protected string subject;
         protected Boolean saveAfterCreation;
+        protected string censoredBody;
 
         public Email(string messageHeaderAccess, string senderAccess, string subjectAccess, string messageBodyAccess, Boolean saveAfterCreation)
         {
@@ -42,20 +43,17 @@ namespace CourseworkApplication
             validateBody(messageBodyAccess);
         }
 
-        public string removeURLS(string messageBody)
+        public string removeURLS(string censoredBody)
         {
-            string pattern = @"http[^ ]*";
-            if (saveAfterCreation)
+            string pattern = @"http[^ ]*\w+";
+            //https://stackoverflow.com/questions/2013124/regex-matching-up-to-the-first-occurrence-of-a-character
+            foreach (Match match in Regex.Matches(censoredBody, pattern))
             {
-                //https://stackoverflow.com/questions/2013124/regex-matching-up-to-the-first-occurrence-of-a-character
-                foreach (Match match in Regex.Matches(messageBody, pattern))
-                {
-                    this.dataManager.quarantineList.Add(match.Value);
-                }
+                this.dataManager.quarantineList.Add(match.Value);
             }
-            
-            messageBody = Regex.Replace(messageBody, pattern, "<URL Quarantined>", RegexOptions.IgnoreCase);
-            return messageBody;
+
+            censoredBody = Regex.Replace(censoredBody, pattern, "<URL Quarantined>", RegexOptions.IgnoreCase);
+            return censoredBody;
         }
 
         public override string messageHeaderAccess
@@ -106,6 +104,18 @@ namespace CourseworkApplication
             }
         }
 
+        public string censoredBodyAccess
+        {
+            get
+            {
+                return censoredBody;
+            }
+            set
+            {
+                censoredBody = value;
+            }
+        }
+
         public override bool validateBody(string messageBodyAccess)
         {
             if (messageBodyAccess.Length > 1030)
@@ -118,7 +128,13 @@ namespace CourseworkApplication
             }
             else
             {
-                this.messageBody = removeURLS(messageBodyAccess);
+                this.censoredBody = removeURLS(messageBodyAccess);
+                this.messageBody = messageBodyAccess;
+
+                this.dataManager.messageNum++;
+
+                this.messageHeader = "E" + this.dataManager.messageNum.ToString();
+
                 if (saveAfterCreation)
                 {
                     this.dataManager.saveToFile(this);

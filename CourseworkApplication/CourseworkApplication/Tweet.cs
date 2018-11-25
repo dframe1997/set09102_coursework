@@ -35,25 +35,38 @@ namespace CourseworkApplication
             {
                 this.messageBody = keywordReplace(messageBodyAccess);
 
+                this.dataManager.messageNum++;
+
+                this.messageHeader = "T" + this.dataManager.messageNum.ToString();
+
+                //https://stackoverflow.com/questions/13869642/grabing-hashtagged-word-from-a-string-using-regex
+                var regex = new Regex(@"(?<=#)\w+");
+                var matches = regex.Matches(this.messageBody);
+
+                foreach (Match m in matches)
+                {
+                    if (dataManager.hashtagList.FirstOrDefault(item => item.hashtagTextAccess == m.Value) != null)
+                    {
+                        dataManager.hashtagList.First(item => item.hashtagTextAccess == m.Value).instancesAccess += 1;
+                    }
+                    else
+                    {
+                        this.dataManager.hashtagList.Add(new Hashtag(m.Value, 1));
+                    }
+                    this.dataManager.hashtagList.Sort((i, j) => i.instancesAccess.CompareTo(j.instancesAccess));
+                    this.dataManager.hashtagList.Reverse();
+                }
+
+                regex = new Regex(@"(?<=@)\w+");
+                matches = regex.Matches(this.messageBody);
+
+                foreach (Match m in matches)
+                {
+                    this.dataManager.mentionList.Add(m.Value);
+                }
+
                 if (saveAfterCreation)
                 {
-                    //https://stackoverflow.com/questions/13869642/grabing-hashtagged-word-from-a-string-using-regex
-                    var regex = new Regex(@"(?<=#)\w+");
-                    var matches = regex.Matches(this.messageBody);
-
-                    foreach (Match m in matches)
-                    {
-                        this.dataManager.hashtagList.Add(m.Value);
-                    }
-
-                    regex = new Regex(@"(?<=@)\w+");
-                    matches = regex.Matches(this.messageBody);
-
-                    foreach (Match m in matches)
-                    {
-                        this.dataManager.mentionList.Add(m.Value);
-                    }
-
                     this.dataManager.saveToFile(this);
                 }
             }
@@ -101,7 +114,8 @@ namespace CourseworkApplication
 
         public override bool validateBody(string messageBody)
         {
-            if(messageBody.Length > 142)
+            messageBody = Regex.Replace(messageBody, @" ?\<.{0,100}?\>", string.Empty); //Up to 100 characters will be ignored for acronyms
+            if (messageBody.Length > 142)
             {
                 return false;
             }

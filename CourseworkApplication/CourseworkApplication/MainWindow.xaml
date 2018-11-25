@@ -11,8 +11,8 @@
             <FlowDocument/>
         </RichTextBox>
         <Label x:Name="label" Content="Input" HorizontalAlignment="Left" Margin="172,10,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="label1" Content="Processed message" HorizontalAlignment="Left" Margin="449,10,0,0" VerticalAlignment="Top"/>
-        <RichTextBox x:Name="tbx_output" HorizontalAlignment="Left" Height="273" Margin="376,41,0,0" VerticalAlignment="Top" Width="257">
+        <Label x:Name="label1" Content="Processed message" HorizontalAlignment="Left" Margin="445,10,0,0" VerticalAlignment="Top"/>
+        <RichTextBox x:Name="tbx_output" HorizontalAlignment="Left" Height="248" Margin="376,41,0,0" VerticalAlignment="Top" Width="239">
             <FlowDocument/>
         </RichTextBox>
         <Button x:Name="btn_submit" Content="Submit" HorizontalAlignment="Left" Margin="125,294,0,0" VerticalAlignment="Top" Width="246" Click="btn_submit_Click"/>
@@ -28,12 +28,13 @@
         <Label Content="Subject" HorizontalAlignment="Left" Margin="10,93,0,0" VerticalAlignment="Top"/>
         <Label Content="Type" HorizontalAlignment="Left" Margin="10,38,0,0" VerticalAlignment="Top"/>
         <Label Content="Enter your message below" HorizontalAlignment="Left" Margin="116,125,0,0" VerticalAlignment="Top"/>
-        <CheckBox x:Name="cbx_SignificantIncidentReport" Content="SIR?" HorizontalAlignment="Left" Margin="329,101,0,0" VerticalAlignment="Top" Checked="Cbx_SignificantIncidentReport_Checked" Unchecked="Cbx_SignificantIncidentReport_Unchecked"/>
-        <Label Content="Lists" HorizontalAlignment="Left" Margin="642,10,0,0" VerticalAlignment="Top"/>
-        <RichTextBox x:Name="tbx_lists" HorizontalAlignment="Left" Height="248" Margin="638,41,0,0" VerticalAlignment="Top" Width="245">
+        <CheckBox x:Name="cbx_SignificantIncidentReport" Content="SIR?" HorizontalAlignment="Left" Margin="329,101,0,0" VerticalAlignment="Top" Checked="Cbx_SignificantIncidentReport_Checked" Unchecked="Cbx_SignificantIncidentReport_Unchecked" IsEnabled="False"/>
+        <Label Content="Lists" HorizontalAlignment="Left" Margin="737,10,0,0" VerticalAlignment="Top"/>
+        <RichTextBox x:Name="tbx_lists" HorizontalAlignment="Left" Height="248" Margin="620,41,0,0" VerticalAlignment="Top" Width="256">
             <FlowDocument/>
         </RichTextBox>
-        <Button x:Name="btn_showLists" Content="Show Lists" HorizontalAlignment="Left" Margin="638,294,0,0" VerticalAlignment="Top" Width="245" Click="Btn_showLists_Click"/>
+        <Button x:Name="btn_prev" Content="Previous message" HorizontalAlignment="Left" Margin="376,294,0,0" VerticalAlignment="Top" Width="117" IsEnabled="False" Click="btn_prev_Click"/>
+        <Button x:Name="btn_next" Content="Next message" HorizontalAlignment="Left" Margin="498,294,0,0" VerticalAlignment="Top" Width="117" IsEnabled="False" Click="btn_next_Click"/>
 
     </Grid>
 </Window>
